@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  become: yes
+  vars:
+    home_directory: /home/{{ ansible_user}}
+  tasks:
+
+    - name: Create .vim directory
+      file:
+        path: "{{ home_directory }}/.vim"
+        state: directory
+        mode: '0755'
+    
+    - name: Create .vim directory sub items
+      file:
+        path: "{{ home_directory }}/.vim/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - autoload
+        - backup
+        - color
+        - plugged
+    
+    - name: Create .vimrc file with customization
+      template:
+        src: templates/vimrc.j2
+        dest: "{{ home_directory }}/.vimrc"
+
